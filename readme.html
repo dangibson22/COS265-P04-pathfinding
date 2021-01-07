@@ -1,0 +1,256 @@
+<meta charset="utf-8" lang="en">  <!-- this line allows UTF-8 characters in the .html file -->
+
+                    **P04_PathFinding**
+
+
+<!--
+
+General
+========
+
+For each of your team's implementations, explain the following (where appropriate and applicable):
+
+- details on calling conventions, input and output data formats, limitations, bugs, and special features.
+- negative aspects of your program (limitations, known bugs)
+- positive aspects (extensions, special features)
+- describe your choice of modularization (abstractions), data structures, and algorithms
+- explain anything you did that is likely to be different from what other students may have done
+- justify any design decisions for which the rationale isn't immediately clear
+
+Feel free to modify the structure of this `readme.html` file to fit the current assignment and to fit how you wish to present your findings.
+
+
+!!! note: Math Typesetting
+    Surround your math with double dollar signs to have [MathJax](https://www.mathjax.org/) typeset it beautifully.
+    To add a tilde in math mode (using dollar signs), use the `\sim` command.
+    If an exponent has more than one character, you must surround it with curly braces.
+    In the example below, the exponent for $T$ must use curly braces, but they aren't required for $N$.
+
+    $$ \sim T^{1.2} N^2 $$
+
+    Note: Typesetting like this is optional; feel free to use plain text if you'd like.
+
+
+Submission
+-----------
+
+Use the CSE LogHistory Plug-in to create a zip file containing all your code, this `readme.html` document, and any additional files of evidence (ex: screenshots).
+If you create a zip by other means, it will include all the files under `tests` and might miss some important files (ex: `.log/history.log`).
+The former will make for a very large zip file; the latter will cause you to lose points.
+
+
+-->
+
+
+
+Author
+=============
+
+
+<!-- fill out the following table with your information -->
+<!-- Note: wrapping table in div.noheader will hide the table's header -->
+<!-- Note: wrapping table in div.firstcol will style the first column different from other columns -->
+<div class="noheader firstcol">
+                  |             
+------------------|-------------
+name              | Daniel Gibson
+computer + OS     | Euler lab machines, Windows 10
+time to complete  | 10 hours
+partner           | None
+additional help   | See reflection
+</div>
+
+
+
+
+Implementations
+===================
+
+Pathfinding Implementation
+----------------------------
+
+<!--
+Explain briefly how you implemented the Pathfinding data type.
+How did you check that your implementation was correct?
+
+Briefly explain how you represented the search node PFNode.
+
+Include code listings, screenshots, diagrams, etc. if helpful.
+-->
+
+My Pathfinding implementation uses a helper class PFNode to represent the coordinates in
+the terrain in a way that keeps track of all the individual paths. `PFNode` keeps track its source
+node so that the path can easily be retraced. I also used a double array of PFNodes to keep
+track of whether a certain location has already been searched.
+
+I use a helper class called PFNode to represent a search node. It keeps track of its current
+location, its cost, and the node it comes from. When the node is created, I calculate its cost
+and store it within the `PFNode`. When `getCost()` is called, I access the previous node's cost
+and implement the heuristic cost.
+
+My `computePath()` function implements the A* search algorithm. For each given tile, I
+scan all the surrounding neighbors and, if they are valid tiles, I save them as a valid path,
+including their cost. I then search the minimum cost path and continue until either a path
+from start to end is found or until there are no search options left. Once the path is found, I
+save the ending node and create a Stack of Coords representing the path, which is
+returned as an iterable of coords. All functions in PFNode run in constant time except for
+`computePath()`.
+
+
+
+Walker Implementation
+-----------------------
+
+<!--
+Explain briefly how you implemented the Walker data type.
+How did you test the correctness of your algorithm?
+-->
+
+The `Walker.java` class is passed a terrain and iterable of coords representing the path. I use a
+Queue to represent the path. Each time `advance()` is called, I move through as much cost as allowed by
+`byTime`, keeping track of how far I go if I don't end exactly at a point in the
+path. This implementation works for any value of `STEPS_TO_WALK` and for any path cost.
+
+
+
+Analysis
+=============
+
+<!--
+For each of the following maps and given the default starting and ending locations, give the estimated travel cost ($\text{cost}_0(E)$) and search size for different heuristic values ($h$).
+-->
+
+map      | h   | cost | search
+---------|-----|------|--------
+maze32_0 |   0 | 252  | 934 (91%)
+maze32_0 |   1 | 252  | 844 (82%)
+maze32_0 |   2 | 252  | 771 (75%)
+maze32_0 | 128 | 252  | 729 (71%)
+maze32_1 |   0 | 56   | 906 (88%)
+maze32_1 |  16 | 56   | 779 (76%)
+usa128   |   0 | $$1.59 * 10^{7}$$ | 9798 (59%)
+usa128   |   1 | $$1.59 * 10^{7}$$ | 9244 (56%)
+usa128   |   2 | $$1.59 * 10^{7}$$ | 8050 (49%)
+usa128   | 128 | $$1.59 * 10^{7}$$ | 8020 (48%)
+usa256   |   0 | $$1.74 * 10^{7}$$ | 35869 (54%)
+usa256   |   1 | $$1.74 * 10^{7}$$ | 31846 (48%)
+usa256   |   2 | $$1.74 * 10^{7}$$ | 31747 (48%)
+usa256   | 128 | $$1.74 * 10^{7}$$ | 31728 (48%)
+usa1024  |   0 | $$1.4 * 10^{7}$$  | 538159 (51%)
+usa1024  |   1 | $$1.4 * 10^{7}$$  | 495559 (47%)
+usa1024  |   2 | $$1.4 * 10^{7}$$  | 411160 (39%)
+usa1024  | 128 | $$1.4 * 10^{7}$$  | 408806 (38%)
+
+
+<!--
+Given the information above, do you notice any patterns?
+Is there a value of $h$ that seems to work best?
+-->
+
+
+
+
+
+Known bugs / limitations
+-------------------------
+
+<!-- Details and screenshots here -->
+I did not find any bugs or limitations.
+
+
+
+
+
+Reflection
+===========
+
+Critical Thinking
+-------------------
+
+<!--
+Did you use any of the CT Skills?
+If so, which ones did you use, and how did you use them?
+If not, explain what you did when you needed help.
+Or, did you not need help?
+
+- consulting an expert
+- asking good questions
+- edge cases
+- similar problems / fewer variables
+- developing subgoals
+
+
+What did you do to monitor your progress and make sure you did not spend more time than necessary on this assignment?
+-->
+
+I used consulting an expert and asking good questions to understand what needed to be
+done for the `Walker.java` class. I also used similar problems / fewer variables to simplify the
+pathfinding algorithm during the early stages of development.
+
+
+Help
+-----------
+
+<!--
+Describe whatever help (if any) that you received.
+Don't include readings, lectures, but do include any help from people (including course staff, lab TAs, classmates, and friends) and attribute them by name.
+How did you discuss the problem with others? (ex: white-board algorithms, looking over code for bugs, looking at print out results, etc.)
+-->
+
+<!-- ... -->
+I received help from Dr. Denning on some of the details of my `Walker.java` implementation.
+I also discussed with some fellow students what the end goal was for the `Walker.java` class,
+as I was having trouble understanding the instructions for that class. I used whiteboarding
+many times to flesh out the details of my algorithm.
+
+
+
+
+<!--
+Since this is an individual assignment, if you worked with a partner, assert below that the work you are turning in is your own work, and that you only did "whiteboard" work as a group.
+Give one sentence explaining what each of you contributed.
+If you used the code from the lab challenge, explain what is shared between you and your lab partner.
+-->
+
+<!-- ... -->
+While I discussed the criteria of the problem with my peers, all my code was developed and
+tested by me.
+
+
+
+<!--
+Describe any serious problems you encountered.
+How much time did you spend writing new code, debugging code, thinking about the algorithms, discussing with someone else, running tests, writing comments and documentation, etc.?
+List any other comments here.
+Feel free to provide any feedback on how much you learned from doing the assignment, and whether you enjoyed doing it.
+-->
+
+<!-- ... -->
+My two biggest struggles on this project were initially figuring out all the different
+components provided to us by Dr. Denning and understanding the intended function of the
+`Walker.java` class. A majority of my time was spent debugging code and thinking about
+details of the algorithm. This project was tough, but I enjoyed it and very much look
+forward to the next one.
+
+
+
+
+
+
+
+<!--   Feel free to modify the following to fit a theme of your choosing   -->
+<link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet"> <!-- a sans-serif font -->
+<style>  /* A TAYLOR-INSPIRED THEME */
+body {font-family:'Open Sans',sans-serif;}
+.md a:link, .md a:visited {color:hsl(252,23.0%,44.3%); font-family:'Open Sans',sans-serif;}
+.md table.table th {background-color:hsl(252,23.0%,44.3%);}
+.md .noheader th {display:none;}
+.md .firstcol td:first-child {white-space:pre;color:white;vertical-align:top;font-weight:bold;border-color:black;background:hsl(252,23.0%,54.3%);}
+.md .firstcol tr:nth-child(even) td:first-child {background:hsl(252,23.0%,44.3%);}
+</style>
+
+
+<!--   Leave the following Markdeep formatting code, as this will format your text above to look nice in a wed browser   -->
+<style class="fallback">body{visibility:hidden;white-space:pre;font-family:monospace}</style>
+<script src="https://casual-effects.com/markdeep/latest/markdeep.min.js"></script>
+<script>window.alreadyProcessedMarkdeep||(document.body.style.visibility="visible");</script>
